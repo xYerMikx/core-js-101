@@ -132,8 +132,13 @@ function isTriangle(a, b, c) {
  *   { top:20, left:20, width: 20, height: 20 }    =>  false
  *
  */
-function doRectanglesOverlap(/* rect1, rect2 */) {
-  throw new Error('Not implemented');
+function doRectanglesOverlap(rect1, rect2) {
+  return (
+    rect1.left < rect2.left + rect2.width
+    && rect1.left + rect1.width > rect2.left
+    && rect1.top < rect2.top + rect2.height
+    && rect1.top + rect1.height > rect2.top
+  );
 }
 
 
@@ -221,7 +226,6 @@ function findFirstSingleChar(str) {
  *   5, 3, true, true   => '[3, 5]'
  *
  */
-/* TODO: optimize algorithm */
 function getIntervalString(a, b, isStartIncluded, isEndIncluded) {
   let startBracket = '[';
   let endBracket = ']';
@@ -403,8 +407,14 @@ function isBracketsBalanced(str) {
  *    365, 4  => '11231'
  *    365, 10 => '365'
  */
-function toNaryString(/* num, n */) {
-  throw new Error('Not implemented');
+function toNaryString(num, n) {
+  let naryString = '';
+
+  while (num !== 0) {
+    naryString = (num % n) + naryString;
+    num = Math.floor(num / n)
+  }
+  return naryString
 }
 
 
@@ -420,8 +430,20 @@ function toNaryString(/* num, n */) {
  *   ['/web/assets/style.css', '/.bin/mocha',  '/read.me'] => '/'
  *   ['/web/favicon.ico', '/web-scripts/dump', '/verbalizer/logs'] => '/'
  */
-function getCommonDirectoryPath(/* pathes */) {
-  throw new Error('Not implemented');
+
+function getCommonDirectoryPath(pathes) {
+  const parts = pathes.map(path => path.split('/'));
+  const minLength = Math.min(...parts.map(part => part.length));
+  let commonPath = '';
+  for (let i = 0; i < minLength; i++) {
+    const currentPart = parts[0][i];
+    if (parts.every(part => part[i] === currentPart)) {
+      commonPath += currentPart + '/';
+    } else {
+      break;
+    }
+  }
+  return commonPath;
 }
 
 
@@ -443,8 +465,16 @@ function getCommonDirectoryPath(/* pathes */) {
  *                         [ 6 ]]
  *
  */
-function getMatrixProduct(/* m1, m2 */) {
-  throw new Error('Not implemented');
+function getMatrixProduct(m1, m2) {
+  const result = m1.map(row => {
+    return m2[0].map((_, j) => {
+      return row.reduce((sum, value, k) => {
+        return sum + value * m2[k][j];
+      }, 0);
+    });
+  });
+  return result;
+
 }
 
 
